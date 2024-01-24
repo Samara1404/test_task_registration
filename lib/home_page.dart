@@ -10,18 +10,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
- String? _email;
   String? _phone;
   bool isActive = false;
   void _active() {
-    if (_phone != null && _email != null) {}
-    if (_phone!.length < 1 || _email!.length < 1) {
+    if (_phone != null) {}
+    if (_phone!.isEmpty) {
       isActive = false;
     } else {
       isActive = true;
     }
     setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,40 +39,50 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                 
-                  Icon(
-                    
-                    Icons.circle,
-                    size: 30,
-                    color: Color(0xFFFFB700),
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFFFB700),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '1',
+                        style: AppTextStyle.styleApp2,
+                      ),
+                    ),
                   ),
-                  Text(
-                    '  1',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFFFB700),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '2',
+                        style: AppTextStyle.styleApp2,
+                      ),
+                    ),
                   ),
-                  Icon(
-                    Icons.circle,
-                    size: 30,
-                    color: Color(0xFFFFB700),
-                  ),
-                  Text(
-                    '  2',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Icon(
-                    Icons.circle,
-                    size: 30,
-                    color: Color(0xFFFFB700),
-                  ),
-                  Text(
-                    '  3',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFFFB700),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '3',
+                        style: AppTextStyle.styleApp2,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -87,6 +97,10 @@ class _HomePageState extends State<HomePage> {
               Column(
                 children: [
                   TextFormField(
+                    onChanged: (String? phone) {
+                      _phone = phone;
+                      _active();
+                    },
                     decoration: InputDecoration(
                         labelText: "Номер телефона",
                         hintText: '+7....',
@@ -94,13 +108,63 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(10))),
                   ),
                   SizedBox(height: 100),
-                   TextButton(              
-              style: ElevatedButton.styleFrom(backgroundColor:  Color(0xFFA7A7A7), padding:  EdgeInsets.symmetric(vertical: 20, horizontal:150 )),
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const  Page_2 ()));
-              },
-              child: const Text('Отправить смс-код', style: AppTextStyle.styleApp3),              
-              ),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                          return
+                              // Изменение цвета кнопки в зависимости от условия
+                              _phone.toString() == '+79257571404'
+                                  ? Colors.yellow
+                                  : Colors.white30;
+                        }),
+                      ),
+                      onPressed: isActive
+                          ? () {
+                              if (_phone.toString() == '+79257571404') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Page2(),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.white,
+                                    content: Center(
+                                      child: Text(
+                                        'Ошибка номера !',
+                                        style: TextStyle(
+                                          backgroundColor: Colors.redAccent,
+                                          color: Colors.black,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          : null,
+                      child: Text(
+                        'Отправить смс-код',
+                        style: TextStyle(
+                          color: Color(0xFF4E4E4E),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      )),
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: '      Нажимая на данную кнопку, вы даете \n'),
+                    TextSpan(text: 'согласие на обработку '),
+                    TextSpan(
+                        text: 'персональных данных',
+                        style: TextStyle(color: Colors.yellow))
+                  ]))
                 ],
               ),
             ],
